@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StudentsRepository extends JpaRepository<Student, String> {
-    List<Student> findByDepartmentAndSemester(String department, int semester);
+    List<Student> findByDepartmentAndSemesterAndSections(String department, int semester, String sections);
 }

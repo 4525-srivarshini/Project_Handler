@@ -1,6 +1,7 @@
 package com.projects.controller;
 
 import com.projects.beans.Student;
+import com.projects.beans.StudentGroup;
 import com.projects.beans.Supervisor;
 import com.projects.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +48,9 @@ public class HomeController {
     }
 
     @GetMapping("/getStudentsData")
-    public ResponseEntity<?> getStudentsData(@RequestParam String department, @RequestParam int semester) {
+    public ResponseEntity<?> getStudentsData(@RequestParam String department, @RequestParam int semester, @RequestParam String sections) {
         try {
-            List<Student> students = studentService.fetchStudentsByDeptSem(department, semester);
+            List<Student> students = studentService.fetchStudentsByDeptSem(department, semester, sections);
             return ResponseEntity.ok(students);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to return students: " + e.getMessage());
@@ -66,10 +67,24 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/divideStudents")
-    public ResponseEntity<List<List<Student>>> divideStudents(@RequestParam String department, @RequestParam int semester) {
-        List<List<Student>> batches = studentService.divideStudentsIntoBatches(department, semester);
-        return ResponseEntity.ok(batches);
+    @PostMapping("/divide-groups")
+    public ResponseEntity<?> divideGroups(@RequestParam String department, @RequestParam int semester, @RequestParam String section) {
+        try{
+            studentService.divideStudentsIntoBatches(department, semester, section);
+            return ResponseEntity.ok("Students imported successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to import students: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/specializations")
+    public ResponseEntity<?> getSpecializations(@RequestParam String department){
+        try {
+            List<String> specializations = studentService.fetchSpecializations(department);
+            return ResponseEntity.ok(specializations);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to return specializations: " + e.getMessage());
+        }
     }
 
 

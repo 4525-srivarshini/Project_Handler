@@ -3,9 +3,7 @@ package com.projects.beans;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -19,4 +17,8 @@ public class Student {
     private int semester;
     private String sections;
     private double cgpa;
+
+    @ManyToOne
+    @JoinColumn(name = "student_group_id")
+    private StudentGroup studentGroup;
 }
